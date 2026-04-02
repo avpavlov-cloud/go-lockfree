@@ -10,3 +10,7 @@ type Node[T any] struct {
 type TreiberStack[T any] struct {
 	head atomic.Pointer[Node[T]]
 }
+
+func NewTreiberStack[T any]() *TreiberStack[T] {
+	return &TreiberStack[T]{}
+}
