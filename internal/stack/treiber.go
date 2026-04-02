@@ -4,7 +4,7 @@ import "sync/atomic"
 
 type Node[T any] struct {
 	Value T
-	Next *Node[T]
+	Next  *Node[T]
 }
 
 type TreiberStack[T any] struct {
@@ -13,4 +13,16 @@ type TreiberStack[T any] struct {
 
 func NewTreiberStack[T any]() *TreiberStack[T] {
 	return &TreiberStack[T]{}
+}
+
+func (s *TreiberStack[T]) Push(val T) {
+	newNode := &Node[T]{Value: val}
+
+	for {
+		oldHead := s.head.Load()
+		newNode.Next = oldHead
+		if s.head.CompareAndSwap(oldHead, newNode) {
+			return
+		}
+	}
 }
