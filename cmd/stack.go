@@ -28,4 +28,22 @@ func main() {
 
 	wg.Wait()
 	fmt.Println("Все операции завершены успешно!")
+
+	count := 0
+	for {
+		if _, ok := s.Pop(); ok {
+			count++
+		} else {
+			break
+		}		
+	}
+
+	expected := numGoroutines * opsPerGoroutine
+
+	if count == expected {
+		fmt.Println("Результат: Хорошо! Данные не потеряны.")
+	} else {
+		fmt.Println("Результат: Ошибка! Часть данных пропала.")
+	}
+
 }
