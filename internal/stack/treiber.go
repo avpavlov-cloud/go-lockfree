@@ -26,3 +26,20 @@ func (s *TreiberStack[T]) Push(val T) {
 		}
 	}
 }
+
+func (s *TreiberStack[T]) Pop() (T, bool) {
+	for {
+		oldHead := s.head.Load()
+
+		if oldHead == nil {
+			var zero T
+			return zero, false
+		}
+
+		next := oldHead.Next
+
+		if s.head.CompareAndSwap(oldHead, next) {
+			return oldHead.Value, true
+		}
+	}
+}
